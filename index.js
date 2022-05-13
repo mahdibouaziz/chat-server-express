@@ -17,14 +17,12 @@ app.use(cors());
 // socket io part
 io.on("connection", (socket) => {
   console.log("connected");
-  socket.on("event", (data) => {
-    /* … */
-  });
-  socket.on("disconnect", () => {
-    /* … */
+  console.log(socket.id,"Has joined");
+  socket.on("/test", (data) => {
+    console.log("data: ",data);
   });
 });
 
-server.listen(port, () => {
+server.listen(port,() => {
   console.log("server started");
 });
