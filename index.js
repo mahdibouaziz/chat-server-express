@@ -14,13 +14,35 @@ const io = require("socket.io")(server, {
 app.use(express.json());
 app.use(cors());
 
+
+// a client is an object,
+// the key is an id of the doctor/patient 
+// the content is the socket object
+let clients = {};
+
+
 // socket io part
 io.on("connection", (socket) => {
   console.log("connected");
   console.log(socket.id,"Has joined");
-  socket.on("/test", (data) => {
-    console.log("data: ",data);
+  socket.on("signin", (id) => {
+    console.log("id: ",id);
+    clients[id]=socket;
+    // console.log(clients);
   });
+
+  socket.on("message", (data) => {
+    console.log("Data ",data);
+    let targetId=data.targetId;  
+    if (clients[targetId])
+  {
+    console.log('entred');
+    clients[targetId].emit("message",data);
+  }
+    
+  });
+
+
 });
 
 server.listen(port,() => {
